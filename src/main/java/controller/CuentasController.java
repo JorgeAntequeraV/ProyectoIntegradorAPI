@@ -1,4 +1,4 @@
-package buyNotesApi;
+package controller;
 
 import java.util.HashMap;
 
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 @RestController
 //@CrossOrigin(origins = "*")
-public class DemoApplication {
+public class CuentasController {
 	
 	  @GetMapping("/crear")
 	  public ResponseEntity<?> crearPartida(@RequestParam(value = "username") String username) {
@@ -28,7 +28,8 @@ public class DemoApplication {
 	
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(CuentasController.class, args);
+		SpringApplication.run(ListasController.class, args);
 	}
 	
 	
