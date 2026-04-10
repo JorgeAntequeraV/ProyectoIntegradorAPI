@@ -13,12 +13,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import lombok.AllArgsConstructor;
 import lombok.AllArgsConstructor.AnyAnnotation;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "Usuarios")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Usuario {
 
 
