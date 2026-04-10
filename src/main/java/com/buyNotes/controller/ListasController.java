@@ -1,4 +1,4 @@
-package controller;
+package com.buyNotes.controller;
 
 import org.springframework.boot.SpringApplication;
 
