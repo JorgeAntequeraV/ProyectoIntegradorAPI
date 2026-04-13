@@ -24,6 +24,14 @@ public class ProductosLista {
     private Long id;
     
     @ManyToOne
-    @JoinColumn(name = "listas_id")
+    @JoinColumn(name = "lista_id")
     private Listas lista;
+
+
+    private String nombre;
+    private String cantidad;
+    private Double precio;
+
+
+
 }

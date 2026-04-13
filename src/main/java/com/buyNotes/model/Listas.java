@@ -6,13 +6,7 @@ import java.util.List;
 import com.buyNotes.model.enums.Rol;
 
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,8 +24,22 @@ public class Listas {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @OneToMany(mappedBy = "listas", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "lista", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductosLista> productos = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "listas_accesos",
+            joinColumns = @JoinColumn(name = "lista_id"),
+            inverseJoinColumns = @JoinColumn(name = "usuario_id")
+    )
+    private List<Usuario> usuariosConAcceso = new ArrayList<>();
+
+    private String nombre;
+    private String supermercado;
+
+    private String tagAmigoCreador;
+
     
     
     
