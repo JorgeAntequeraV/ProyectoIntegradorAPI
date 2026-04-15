@@ -1,29 +1,18 @@
 package com.buyNotes.controller;
 
 import com.buyNotes.model.PorDefecto;
-import com.buyNotes.model.Productos;
-import com.buyNotes.model.Usuario;
-import com.buyNotes.model.enums.Categoria;
-import com.buyNotes.repository.PorDefectoRepository;
-import com.buyNotes.service.UsuarioService;
+import com.buyNotes.service.PorDefectoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/unaVez")
 @CrossOrigin(origins = "http://localhost:8080/unaVez")
-public class UnaVezController {
+public class PorDefectoController {
 
-    private final PorDefectoRepository PorDefectoRepo;
-    private final UsuarioService usuarioRepo;
+    private final PorDefectoService porDefectoService;
 
 
     @PostMapping("/inicializarPresets")
@@ -229,7 +218,7 @@ public class UnaVezController {
     private ResponseEntity<?> obtenerSupermercadosPorDefecto(
             @RequestHeader("Authorization") String authHeader
     ){
-        PorDefecto uno = PorDefectoRepo.findTopByOrderByIdAsc();
+        PorDefecto uno = porDefectoService.findTopByOrderByIdAsc();
         return ResponseEntity.ok().body(uno.getSupermercadosSugeridos());
 
     }
@@ -237,7 +226,7 @@ public class UnaVezController {
     private ResponseEntity<?> obtenerProductosPorDefecto(
             @RequestHeader("Authorization") String authHeader
     ){
-        PorDefecto uno = PorDefectoRepo.findTopByOrderByIdAsc();
+        PorDefecto uno = porDefectoService.findTopByOrderByIdAsc();
         return ResponseEntity.ok().body(uno.getProductosSugeridos());
     }
 

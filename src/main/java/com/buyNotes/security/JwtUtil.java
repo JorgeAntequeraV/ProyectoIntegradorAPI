@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.buyNotes.model.Usuario;
@@ -18,7 +19,12 @@ import lombok.Getter;
 @Component
 public class JwtUtil {
 
-	private final Key key = Keys.hmacShaKeyFor("clave_secreta_segura_y_larga_para_firmar_jwt".getBytes());
+    private final Key key;
+
+    // Spring inyecta aquí el valor del properties al construir la clase
+    public JwtUtil(@Value("${jwt.secret}") String secret) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+    }
 
     public String generateToken(Usuario usuario) {
         Map<String, Object> claims = new HashMap<>();
