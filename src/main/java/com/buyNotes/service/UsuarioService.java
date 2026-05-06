@@ -1,5 +1,8 @@
 package com.buyNotes.service;
 
+import com.buyNotes.model.SolicitudAmistad;
+import com.buyNotes.repository.SolicitudAmistadRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +26,8 @@ public class UsuarioService {
 	private final JwtUtil jwtUtil;
     
     private final BCryptPasswordEncoder passwordEncoder;
+
+	private final SolicitudAmistadRepository solicitudAmistadRepo;
 	
 	
 	public Usuario createUsuario(Usuario usuario) {
@@ -139,6 +144,33 @@ public class UsuarioService {
 
 	        return usuarioRepo.save(usuario);
 	    }
+
+	@Transactional
+	public void aceptarSolicitudAmistad(Long solicitudId) {
+		SolicitudAmistad solicitud = solicitudAmistadRepo.findById(solicitudId)
+				.orElseThrow(() -> new RuntimeException("Solicitud no encontrada"));
+
+		Usuario u1 = solicitud.getRemitente();
+		Usuario u2 = solicitud.getDestinatario();
+
+		// Amistad bidireccional
+		u1.getAmigos().add(u2);
+		u2.getAmigos().add(u1);
+
+		usuarioRepo.save(u1);
+		usuarioRepo.save(u2);
+
+		// Borramos la solicitud ya procesada
+		solicitudAmistadRepo.delete(solicitud);
+	}
+	@Transactional
+	public Usuario actualizarPreferencias(Long userId, Boolean temaOscuro) {
+		Usuario u = usuarioRepo.getUsuarioById(userId);
+		if (u == null) throw new IllegalArgumentException("Usuario no encontrado");
+		if (temaOscuro != null) u.setTemaOscuro(temaOscuro);
+		return usuarioRepo.save(u);
+	}
+
 
 
 }

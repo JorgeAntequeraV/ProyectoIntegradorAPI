@@ -1,11 +1,17 @@
 package com.buyNotes.controller;
 
+import com.buyNotes.dto.ListaDTO;
+import com.buyNotes.mapper.ListaMapper;
 import com.buyNotes.model.Listas;
 import com.buyNotes.model.ProductosLista;
 import com.buyNotes.service.ListasService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,20 +20,75 @@ import org.springframework.web.bind.annotation.*;
 public class ListasController {
 
     private final ListasService listasService;
+    private final ListaMapper listaMapper;
 
-    // Crear una lista nueva
-    @PostMapping
-    public ResponseEntity<?> crearLista(@RequestAttribute("userId") Long userId, @RequestBody Listas lista) {
+    /* ---------- LECTURA ---------- */
+
+    @GetMapping
+    public ResponseEntity<?> listarMisListas(@RequestAttribute("userId") Long userId) {
         try {
-            return ResponseEntity.ok(listasService.crearLista(userId, lista));
+            List<ListaDTO> dtos = listasService.obtenerListasDelUsuario(userId).stream()
+                    .map(listaMapper::toDTO)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(dtos);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    // Eliminar una lista
+    @GetMapping("/{id}")
+    public ResponseEntity<?> obtenerLista(@RequestAttribute("userId") Long userId,
+                                          @PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(listaMapper.toDTO(listasService.obtenerLista(userId, id)));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    /* ---------- CREAR / EDITAR / BORRAR LISTA ---------- */
+
+    @PostMapping
+    public ResponseEntity<?> crearLista(@RequestAttribute("userId") Long userId,
+                                        @RequestBody Listas lista) {
+        try {
+            return ResponseEntity.ok(listaMapper.toDTO(listasService.crearLista(userId, lista)));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> renombrarLista(@RequestAttribute("userId") Long userId,
+                                            @PathVariable Long id,
+                                            @RequestBody Map<String, String> body) {
+        try {
+            return ResponseEntity.ok(
+                    listaMapper.toDTO(listasService.renombrarLista(userId, id, body.get("nombre")))
+            );
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}/config")
+    public ResponseEntity<?> actualizarConfig(@RequestAttribute("userId") Long userId,
+                                              @PathVariable Long id,
+                                              @RequestBody Map<String, Boolean> body) {
+        try {
+            return ResponseEntity.ok(listaMapper.toDTO(
+                    listasService.actualizarConfig(userId, id,
+                            body.get("ordenAscendente"),
+                            body.get("mostrarPrecios"))
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminarLista(@RequestAttribute("userId") Long userId, @PathVariable Long id) {
+    public ResponseEntity<?> eliminarLista(@RequestAttribute("userId") Long userId,
+                                           @PathVariable Long id) {
         try {
             listasService.eliminarLista(userId, id);
             return ResponseEntity.ok("Lista eliminada correctamente");
@@ -36,7 +97,8 @@ public class ListasController {
         }
     }
 
-    // Añadir un item a una lista específica
+    /* ---------- ITEMS ---------- */
+
     @PostMapping("/{id}/items")
     public ResponseEntity<?> añadirItem(@RequestAttribute("userId") Long userId,
                                         @PathVariable Long id,
@@ -48,7 +110,31 @@ public class ListasController {
         }
     }
 
-    // Quitar un item de una lista
+    @PostMapping("/{idDestino}/items/copiar")
+    public ResponseEntity<?> copiarItems(@RequestAttribute("userId") Long userId,
+                                         @PathVariable Long idDestino,
+                                         @RequestBody Map<String, List<Long>> body) {
+        try {
+            List<Long> ids = body.get("productoIds");
+            return ResponseEntity.ok(listasService.copiarProductos(userId, idDestino, ids));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
+    @PutMapping("/{id}/items/{productoId}")
+    public ResponseEntity<?> editarItem(@RequestAttribute("userId") Long userId,
+                                        @PathVariable Long id,
+                                        @PathVariable Long productoId,
+                                        @RequestBody ProductosLista cambios) {
+        try {
+            return ResponseEntity.ok(listasService.editarProducto(userId, id, productoId, cambios));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @DeleteMapping("/{id}/items/{productoId}")
     public ResponseEntity<?> quitarItem(@RequestAttribute("userId") Long userId,
                                         @PathVariable Long id,
@@ -60,4 +146,19 @@ public class ListasController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    // Inyecta también el ProductoFavoritoService en el controller (campo + RequiredArgsConstructor)
+    private final com.buyNotes.service.ProductoFavoritoService favService;
+
+    @PostMapping("/{idLista}/items/desde-favorito/{idFav}")
+    public ResponseEntity<?> añadirDesdeFavorito(@RequestAttribute("userId") Long userId,
+                                                 @PathVariable Long idLista,
+                                                 @PathVariable Long idFav) {
+        try {
+            return ResponseEntity.ok(favService.añadirALista(userId, idLista, idFav));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }

@@ -31,7 +31,8 @@ public class Usuario {
     private String email;
     private String contrasena;
     private String telefono;
-    
+    private Boolean temaOscuro = false;
+
     private String nombreUsuario;
     
     @Column(unique = true)
@@ -47,6 +48,23 @@ public class Usuario {
     )
     @Column(name = "supermercado")
     private List<String> supermercados = new ArrayList<>();
+
+
+    @ManyToMany
+    @JoinTable(
+            name = "usuario_amigos",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "amigo_id")
+    )
+    private List<Usuario> amigos = new ArrayList<>();
+
+    // 2. Solicitudes de amistad recibidas
+    @OneToMany(mappedBy = "destinatario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SolicitudAmistad> solicitudesAmistadRecibidas = new ArrayList<>();
+
+    // 3. Invitaciones a listas recibidas
+    @OneToMany(mappedBy = "invitado", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<InvitacionLista> invitacionesListaRecibidas = new ArrayList<>();
 
     private Rol rol = Rol.USER; // Por defecto "USER"
 

@@ -40,9 +40,9 @@ public class Listas {
 
     private String tagAmigoCreador;
 
-    
-    
-    
+    private Boolean ordenAscendente = true;
+    private Boolean mostrarPrecios = false;
+
     
     
 }

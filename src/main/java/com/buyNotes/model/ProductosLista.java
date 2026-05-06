@@ -30,6 +30,7 @@ public class ProductosLista {
 
     private String nombre;
     private String cantidad;
+    private String unidadMedida;
     private Double precio;
 
 

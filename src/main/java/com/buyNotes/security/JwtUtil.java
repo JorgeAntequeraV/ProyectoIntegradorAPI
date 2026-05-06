@@ -39,8 +39,6 @@ public class JwtUtil {
                 //.setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
-        // En producción, quita este log
-        System.out.println("Token generado para " + usuario.getNombreUsuario() + ": " + token);  // ← AQUÍ
 
         return token;
     }
