@@ -42,6 +42,14 @@ public class ListasService {
         Usuario usuario = usuarioRepo.getUsuarioById(userId);
         if (usuario == null) throw new IllegalArgumentException("Usuario no encontrado");
 
+        // Garantizar que las listas no sean null tras la deserialización
+        if (nuevaLista.getUsuariosConAcceso() == null) {
+            nuevaLista.setUsuariosConAcceso(new java.util.ArrayList<>());
+        }
+        if (nuevaLista.getProductos() == null) {
+            nuevaLista.setProductos(new java.util.ArrayList<>());
+        }
+
         nuevaLista.setTagAmigoCreador(usuario.getTagAmigo());
         nuevaLista.getUsuariosConAcceso().add(usuario);
         if (nuevaLista.getOrdenAscendente() == null) nuevaLista.setOrdenAscendente(true);
@@ -49,6 +57,7 @@ public class ListasService {
 
         return listasRepo.save(nuevaLista);
     }
+
 
     @Transactional
     public Listas renombrarLista(Long userId, Long listaId, String nuevoNombre) {

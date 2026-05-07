@@ -6,6 +6,7 @@ import java.util.List;
 import com.buyNotes.model.enums.Rol;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,6 +28,7 @@ public class Listas {
     @OneToMany(mappedBy = "lista", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductosLista> productos = new ArrayList<>();
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "listas_accesos",
@@ -34,6 +36,7 @@ public class Listas {
             inverseJoinColumns = @JoinColumn(name = "usuario_id")
     )
     private List<Usuario> usuariosConAcceso = new ArrayList<>();
+
 
     private String nombre;
     private String supermercado;

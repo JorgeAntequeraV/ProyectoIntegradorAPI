@@ -1,5 +1,6 @@
 package com.buyNotes.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,17 +15,21 @@ public class InvitacionLista {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "lista_id")
-    private Listas lista; // A qué lista se le invita
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "invitado_id")
-    private Usuario invitado; // El usuario que recibe la invitación
+    private Usuario invitado;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "anfitrion_id")
-    private Usuario anfitrion; // El usuario que envía la invitación
+    private Usuario anfitrion;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "lista_id")
+    private Listas lista;
+
 
     private LocalDateTime fechaInvitacion = LocalDateTime.now();
 }

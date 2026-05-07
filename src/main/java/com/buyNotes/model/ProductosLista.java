@@ -1,5 +1,6 @@
 package com.buyNotes.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,21 +19,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProductosLista {
 
-	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "lista_id")
     private Listas lista;
-
 
     private String nombre;
     private String cantidad;
     private String unidadMedida;
     private Double precio;
-
-
-
 }

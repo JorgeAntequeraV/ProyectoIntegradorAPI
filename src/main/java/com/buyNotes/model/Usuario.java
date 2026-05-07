@@ -6,6 +6,7 @@ package com.buyNotes.model;
 
 import com.buyNotes.model.enums.Rol;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.AllArgsConstructor.AnyAnnotation;
@@ -29,15 +30,17 @@ public class Usuario {
 
     private String nombre;
     private String email;
+    @JsonIgnore
     private String contrasena;
     private String telefono;
     private Boolean temaOscuro = false;
 
     private String nombreUsuario;
-    
+
     @Column(unique = true)
     private String tagAmigo;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "usuariosConAcceso")
     private List<Listas> misListas = new ArrayList<>();
 
@@ -50,6 +53,7 @@ public class Usuario {
     private List<String> supermercados = new ArrayList<>();
 
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "usuario_amigos",
@@ -59,10 +63,12 @@ public class Usuario {
     private List<Usuario> amigos = new ArrayList<>();
 
     // 2. Solicitudes de amistad recibidas
+    @JsonIgnore
     @OneToMany(mappedBy = "destinatario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SolicitudAmistad> solicitudesAmistadRecibidas = new ArrayList<>();
 
     // 3. Invitaciones a listas recibidas
+    @JsonIgnore
     @OneToMany(mappedBy = "invitado", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<InvitacionLista> invitacionesListaRecibidas = new ArrayList<>();
 
