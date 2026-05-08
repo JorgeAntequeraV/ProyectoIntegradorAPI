@@ -4,6 +4,8 @@ import com.buyNotes.model.enums.Rol;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class UsuarioDTO {
 	private Long id;
@@ -15,6 +17,10 @@ public class UsuarioDTO {
 	
 	private String nombreUsuario;
 	private String tagAmigo;
+
+    private List<UsuarioDTO> amigos;
+    private List<SolicitudAmistadDTO> solicitudesPendientes;
+    private List<InvitacionListaDTO> invitacionesListas;
 	
 	private Rol rol; 
 }

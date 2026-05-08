@@ -1,0 +1,15 @@
+package com.buyNotes.model.enums;
+
+public enum Categoria {
+    FRUTAS_Y_VERDURAS,
+    CARNICERIA_Y_CHARCUTERIA,
+    PESCADERIA,
+    LACTEOS_Y_HUEVOS,
+    PANADERIA_Y_PASTELERIA,
+    DESPENSA,
+    BEBIDAS,
+    CONGELADOS,
+    CUIDADO_PERSONAL_E_HIGIENE,
+    LIMPIEZA_DEL_HOGAR,
+    MASCOTAS
+}

@@ -1,5 +1,8 @@
 package com.buyNotes.service;
 
+import com.buyNotes.model.SolicitudAmistad;
+import com.buyNotes.repository.SolicitudAmistadRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,17 +26,19 @@ public class UsuarioService {
 	private final JwtUtil jwtUtil;
     
     private final BCryptPasswordEncoder passwordEncoder;
+
+	private final SolicitudAmistadRepository solicitudAmistadRepo;
 	
 	
 	public Usuario createUsuario(Usuario usuario) {
 
-        // Validar nombreUsuario único
+
         Usuario existente = usuarioRepo.getUsuarioByNombreUsuario(usuario.getNombreUsuario());
         if (existente != null) {
             throw new IllegalArgumentException("El nombre de usuario ya está en uso.");
         }
 
-        // Validar email único
+
         Usuario emailExistente = usuarioRepo.getUsuarioByEmail(usuario.getEmail());
         if (emailExistente!= null) {
             throw new IllegalArgumentException("El email ya está registrado.");
@@ -77,8 +82,7 @@ public class UsuarioService {
             throw new IllegalArgumentException("Usuario no encontrado.");
         }
     }
-	
-	//Método para generar un tag para añadir usuarios
+
 	public String generarTagUnico() {
 	    String nuevoTag;
 		do {
@@ -105,12 +109,9 @@ public class UsuarioService {
 
 	       
 
-	        // Verificamos la contraseña actual
 	        if (!passwordEncoder.matches(currentPassword, usuario.getContrasena())) {
 	            throw new IllegalArgumentException("La contraseña actual es incorrecta.");
 	        }
-
-	        // Establecemos la nueva contraseña encriptada
 	        usuario.setContrasena(passwordEncoder.encode(newPassword));
 	        usuarioRepo.save(usuario);
 	    }
@@ -139,5 +140,31 @@ public class UsuarioService {
 
 	        return usuarioRepo.save(usuario);
 	    }
+
+	@Transactional
+	public void aceptarSolicitudAmistad(Long solicitudId) {
+		SolicitudAmistad solicitud = solicitudAmistadRepo.findById(solicitudId)
+				.orElseThrow(() -> new RuntimeException("Solicitud no encontrada"));
+
+		Usuario u1 = solicitud.getRemitente();
+		Usuario u2 = solicitud.getDestinatario();
+
+		u1.getAmigos().add(u2);
+		u2.getAmigos().add(u1);
+
+		usuarioRepo.save(u1);
+		usuarioRepo.save(u2);
+
+		solicitudAmistadRepo.delete(solicitud);
+	}
+	@Transactional
+	public Usuario actualizarPreferencias(Long userId, Boolean temaOscuro) {
+		Usuario u = usuarioRepo.getUsuarioById(userId);
+		if (u == null) throw new IllegalArgumentException("Usuario no encontrado");
+		if (temaOscuro != null) u.setTemaOscuro(temaOscuro);
+		return usuarioRepo.save(u);
+	}
+
+
 
 }

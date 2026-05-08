@@ -25,10 +25,13 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+
+@EnableMethodSecurity
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class SecurityConfig{
 
     private final JwtAuthenticationFilter jwtFilter;
 
@@ -46,9 +49,11 @@ public class SecurityConfig {
                                 "/usuarios/login",
                                 "/usuarios/registro",
                                 "/auth/forgot-password",
-                                "/auth/reset-password"
+                                "/auth/reset-password",
+                                "/auth/change-email-confirm"
                         ).permitAll()
-                        
+
+
 
                         // solo ADMIN
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")

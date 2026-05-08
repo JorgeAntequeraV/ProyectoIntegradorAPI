@@ -38,8 +38,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // Deja pasar sin autenticar rutas públicas que no necesitan token
         if (path.startsWith("/usuarios/login")
                 || path.equals("/usuarios/registro")
-                || path.equals("/auth/forgot-password")     // ⬅️ nuevo
-                || path.equals("/auth/reset-password")      // ⬅️ nuevo
+                || path.equals("/auth/forgot-password")
+                || path.equals("/auth/reset-password" )
+                || path.equals("/auth/change-email-confirm")
+
 
         ) {
             filterChain.doFilter(request, response);
@@ -71,10 +73,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                     UserDetails userDetails = User.withUsername(username).password("").authorities(authorities).build();
 
-                    // ⬇️ NUEVO: extrae userId del token y colócalo en la request
+                    // extrae userId del token y lo coloca en la request
                     Integer userId = jwtUtil.extractUserId(jwt);
                         if (userId != null) {
-                            request.setAttribute("userId", userId); // <-- clave para @RequestAttribute
+                            request.setAttribute("userId", userId);
                     }
 
                     UsernamePasswordAuthenticationToken authToken =
@@ -85,7 +87,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
             System.out.println("Token inválido: " + e.getMessage());
-            // No bloqueamos; simplemente no autenticamos y SecurityConfig resolverá
+            //No bloqueamos, simplemente no autenticamos y SecurityConfig resolverá
         }
 
         filterChain.doFilter(request, response);

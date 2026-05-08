@@ -5,14 +5,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.buyNotes.dto.UsuarioDTO;
 import com.buyNotes.model.Usuario;
@@ -61,11 +54,6 @@ public class UsuariosController {
 
 	        
 	            String token = jwtUtil.generateToken(usuario);
-
-	            System.out.println("🟢 Login exitoso para: " + nombreUsuario + " → Token: " + token);
-
-	            
-
 	            return ResponseEntity.ok(token);
 
 	        } catch (IllegalArgumentException e) {
@@ -117,12 +105,23 @@ public class UsuariosController {
 	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Error al actualizar el perfil"));
 	        }
 	    }
-	    
-	 
-	 
-	 
-	 
-	 //Ejemplo de metodo con onbtención del usuario
+	@PutMapping("/preferencias")
+	public ResponseEntity<?> actualizarPreferencias(@RequestAttribute("userId") Long userId,
+													@RequestBody Map<String, Boolean> body) {
+		try {
+			Usuario u = usuarioService.actualizarPreferencias(userId, body.get("temaOscuro"));
+			return ResponseEntity.ok(Map.of("temaOscuro", u.getTemaOscuro()));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+		}
+	}
+
+
+
+
+
+
+	//Ejemplo de metodo con onbtención del usuario
 //	 @GetMapping()
 //	    public ResponseEntity<?> LogIn (
 //	    @RequestHeader("Authorization") String authHeader
