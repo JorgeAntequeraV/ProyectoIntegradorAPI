@@ -28,8 +28,8 @@ public class JwtUtil {
 
     public String generateToken(Usuario usuario) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", "ROLE_" + usuario.getRol().name());  // Usa el rol real del usuario
-        claims.put("userId", usuario.getId());                 // ← añade el ID del usuario
+        claims.put("role", "ROLE_" + usuario.getRol().name());
+        claims.put("userId", usuario.getId());
 
 
         String token = Jwts.builder()
@@ -89,9 +89,7 @@ public class JwtUtil {
 
         if (raw == null) return null;
         String role = raw.toString();
-        // Devuelve tal cual si ya viene con ROLE_
         if (role.startsWith("ROLE_")) return role;
-        // Normaliza por si algún token viejo venía como "ADMIN"
         return "ROLE_" + role;
     }
 	

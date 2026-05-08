@@ -5,6 +5,7 @@ import com.buyNotes.mapper.ListaMapper;
 import com.buyNotes.model.Listas;
 import com.buyNotes.model.ProductosLista;
 import com.buyNotes.service.ListasService;
+import com.buyNotes.service.ProductoFavoritoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ public class ListasController {
 
     private final ListasService listasService;
     private final ListaMapper listaMapper;
+    private final ProductoFavoritoService favService;
 
     /* ---------- LECTURA ---------- */
 
@@ -147,8 +149,6 @@ public class ListasController {
         }
     }
 
-    // Inyecta también el ProductoFavoritoService en el controller (campo + RequiredArgsConstructor)
-    private final com.buyNotes.service.ProductoFavoritoService favService;
 
     @PostMapping("/{idLista}/items/desde-favorito/{idFav}")
     public ResponseEntity<?> añadirDesdeFavorito(@RequestAttribute("userId") Long userId,

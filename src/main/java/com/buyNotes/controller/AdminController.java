@@ -24,7 +24,6 @@ public class AdminController {
     @GetMapping("/usuarios")
     public ResponseEntity<?> listar(@RequestParam(value = "q", required = false) String q) {
         List<Usuario> users = (q == null) ? adminService.listar() : adminService.buscar(q);
-        // Proyección segura
         List<Map<String, Object>> resp = users.stream().map(u -> Map.of(
                 "id", (Object) u.getId(),
                 "nombreUsuario", u.getNombreUsuario(),

@@ -32,13 +32,13 @@ public class UsuarioService {
 	
 	public Usuario createUsuario(Usuario usuario) {
 
-        // Validar nombreUsuario único
+
         Usuario existente = usuarioRepo.getUsuarioByNombreUsuario(usuario.getNombreUsuario());
         if (existente != null) {
             throw new IllegalArgumentException("El nombre de usuario ya está en uso.");
         }
 
-        // Validar email único
+
         Usuario emailExistente = usuarioRepo.getUsuarioByEmail(usuario.getEmail());
         if (emailExistente!= null) {
             throw new IllegalArgumentException("El email ya está registrado.");
@@ -82,8 +82,7 @@ public class UsuarioService {
             throw new IllegalArgumentException("Usuario no encontrado.");
         }
     }
-	
-	//Método para generar un tag para añadir usuarios
+
 	public String generarTagUnico() {
 	    String nuevoTag;
 		do {
@@ -110,12 +109,9 @@ public class UsuarioService {
 
 	       
 
-	        // Verificamos la contraseña actual
 	        if (!passwordEncoder.matches(currentPassword, usuario.getContrasena())) {
 	            throw new IllegalArgumentException("La contraseña actual es incorrecta.");
 	        }
-
-	        // Establecemos la nueva contraseña encriptada
 	        usuario.setContrasena(passwordEncoder.encode(newPassword));
 	        usuarioRepo.save(usuario);
 	    }
@@ -153,14 +149,12 @@ public class UsuarioService {
 		Usuario u1 = solicitud.getRemitente();
 		Usuario u2 = solicitud.getDestinatario();
 
-		// Amistad bidireccional
 		u1.getAmigos().add(u2);
 		u2.getAmigos().add(u1);
 
 		usuarioRepo.save(u1);
 		usuarioRepo.save(u2);
 
-		// Borramos la solicitud ya procesada
 		solicitudAmistadRepo.delete(solicitud);
 	}
 	@Transactional

@@ -22,7 +22,7 @@ public class ListaMapper {
         dto.setOrdenAscendente(lista.getOrdenAscendente());
         dto.setMostrarPrecios(lista.getMostrarPrecios());
 
-        // Productos ordenados por nombre según el flag
+        // Productos ordenados por nombre
         boolean asc = Boolean.TRUE.equals(lista.getOrdenAscendente());
         Comparator<ProductosLista> cmp = Comparator.comparing(
                 p -> p.getNombre() == null ? "" : p.getNombre().toLowerCase()
@@ -34,7 +34,6 @@ public class ListaMapper {
                 .collect(Collectors.toList());
         dto.setProductos(productosOrdenados);
 
-        // Sumatorio total si procede
         if (Boolean.TRUE.equals(lista.getMostrarPrecios())) {
             double total = lista.getProductos().stream()
                     .filter(p -> p.getPrecio() != null)

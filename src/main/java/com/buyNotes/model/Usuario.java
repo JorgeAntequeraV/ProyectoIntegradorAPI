@@ -7,6 +7,7 @@ package com.buyNotes.model;
 import com.buyNotes.model.enums.Rol;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.AllArgsConstructor.AnyAnnotation;
@@ -30,11 +31,11 @@ public class Usuario {
 
     private String nombre;
     private String email;
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String contrasena;
     private String telefono;
     private Boolean temaOscuro = false;
-
+    @Column(unique = true)
     private String nombreUsuario;
 
     @Column(unique = true)

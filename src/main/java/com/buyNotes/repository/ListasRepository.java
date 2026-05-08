@@ -9,6 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ListasRepository  extends JpaRepository<Listas, Long> {
-    // Listas a las que el usuario tiene acceso (propias + compartidas aceptadas)
     List<Listas> findByUsuariosConAccesoId(Long usuarioId);
 }
