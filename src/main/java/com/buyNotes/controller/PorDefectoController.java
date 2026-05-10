@@ -1,10 +1,15 @@
 package com.buyNotes.controller;
 
 import com.buyNotes.model.PorDefecto;
+import com.buyNotes.model.Productos;
+import com.buyNotes.model.enums.Categoria;
 import com.buyNotes.service.PorDefectoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,7 +22,7 @@ public class PorDefectoController {
 
     @PostMapping("/inicializarPresets")
     public ResponseEntity<?> registerUser() {
-/*        PorDefecto uno = new PorDefecto();
+        /*PorDefecto uno = new PorDefecto();
         List<String> supermercados = new ArrayList<>();
         supermercados.add("Mercadona");
         supermercados.add("Carrefour");
@@ -206,9 +211,9 @@ public class PorDefectoController {
         productos.add(new Productos("Pienso para gatos", Categoria.MASCOTAS));
         productos.add(new Productos("Comida humeda para gatos", Categoria.MASCOTAS));
         productos.add(new Productos("Arena para gatos", Categoria.MASCOTAS));
-        uno.setProductosSugeridos(productos);*/
+        uno.setProductosSugeridos(productos);
 
-        /*PorDefectoRepo.save(uno);*/
+        porDefectoService.save(uno);*/
 
         return ResponseEntity.ok().body("Todo ha ido correcto");
 

@@ -115,9 +115,8 @@ public class ListasController {
     @PostMapping("/{idDestino}/items/copiar")
     public ResponseEntity<?> copiarItems(@RequestAttribute("userId") Long userId,
                                          @PathVariable Long idDestino,
-                                         @RequestBody Map<String, List<Long>> body) {
+                                         @RequestBody List<Long> ids) {
         try {
-            List<Long> ids = body.get("productoIds");
             return ResponseEntity.ok(listasService.copiarProductos(userId, idDestino, ids));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

@@ -11,6 +11,7 @@ import com.buyNotes.dto.UsuarioDTO;
 import com.buyNotes.model.Usuario;
 import com.buyNotes.repository.UsuarioRepository;
 import com.buyNotes.security.JwtUtil;
+import com.buyNotes.service.RecaptchaService;
 import com.buyNotes.service.UsuarioService;
 
 import lombok.RequiredArgsConstructor;
@@ -22,15 +23,23 @@ import lombok.RequiredArgsConstructor;
 public class UsuariosController {
 
 	 private final UsuarioService usuarioService;
-	 
 
-	 private final JwtUtil jwtUtil; 
-	 
-	 
+
+	 private final JwtUtil jwtUtil;
+
+	 private final RecaptchaService recaptchaService;
+
+
 	 @PostMapping("/registro")
-	    public ResponseEntity<Map<String, Object>> registerUser(@RequestBody Usuario usuario) {
+	    public ResponseEntity<Map<String, Object>> registerUser(
+	            @RequestHeader(value = "X-Recaptcha-Token", required = false) String recaptchaToken,
+	            @RequestBody Usuario usuario) {
 	        Map<String, Object> response = new HashMap<>();
 	        try {
+	            if (!recaptchaService.verificar(recaptchaToken)) {
+	                response.put("error", "Verificación de reCAPTCHA fallida");
+	                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+	            }
 	            Usuario nuevoUsuario = usuarioService.createUsuario(usuario);
 	            response.put("message", "Usuario registrado correctamente");
 	            response.put("userId", nuevoUsuario.getId());
@@ -111,6 +120,16 @@ public class UsuariosController {
 		try {
 			Usuario u = usuarioService.actualizarPreferencias(userId, body.get("temaOscuro"));
 			return ResponseEntity.ok(Map.of("temaOscuro", u.getTemaOscuro()));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+		}
+	}
+	@PutMapping("/admin")
+	public ResponseEntity<?> hacerAdmin(
+													@RequestBody Map<String, Long> body) {
+		try {
+			Usuario u = usuarioService.actualizarRol(body.get("usuario"));
+			return ResponseEntity.ok("Actualizado con exito");
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
 		}
