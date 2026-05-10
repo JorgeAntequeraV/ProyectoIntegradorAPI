@@ -50,7 +50,9 @@ public class SecurityConfig{
                                 "/usuarios/registro",
                                 "/auth/forgot-password",
                                 "/auth/reset-password",
-                                "/auth/change-email-confirm"
+                                "/auth/change-email-confirm",
+                                "/auth/google",
+                                "/auth/verify-email"
                         ).permitAll()
 
 

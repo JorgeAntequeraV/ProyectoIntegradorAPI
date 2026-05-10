@@ -35,6 +35,7 @@ public class Usuario {
     private String contrasena;
     private String telefono;
     private Boolean temaOscuro = false;
+    private Boolean emailVerificado = false;
     @Column(unique = true)
     private String nombreUsuario;
 

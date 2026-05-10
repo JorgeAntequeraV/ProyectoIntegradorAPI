@@ -41,6 +41,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 || path.equals("/auth/forgot-password")
                 || path.equals("/auth/reset-password" )
                 || path.equals("/auth/change-email-confirm")
+                || path.equals("/auth/google")
+                || path.equals("/auth/verify-email")
 
 
         ) {

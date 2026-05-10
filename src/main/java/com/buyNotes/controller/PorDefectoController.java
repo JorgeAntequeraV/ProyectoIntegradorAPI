@@ -22,7 +22,7 @@ public class PorDefectoController {
 
     @PostMapping("/inicializarPresets")
     public ResponseEntity<?> registerUser() {
-        PorDefecto uno = new PorDefecto();
+        /*PorDefecto uno = new PorDefecto();
         List<String> supermercados = new ArrayList<>();
         supermercados.add("Mercadona");
         supermercados.add("Carrefour");
@@ -213,7 +213,7 @@ public class PorDefectoController {
         productos.add(new Productos("Arena para gatos", Categoria.MASCOTAS));
         uno.setProductosSugeridos(productos);
 
-        porDefectoService.save(uno);
+        porDefectoService.save(uno);*/
 
         return ResponseEntity.ok().body("Todo ha ido correcto");
 

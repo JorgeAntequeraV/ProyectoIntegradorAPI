@@ -17,7 +17,7 @@ public class PorDefectoService {
     public PorDefecto findTopByOrderByIdAsc(){
         return porDefectoRepo.findTopByOrderByIdAsc();
     }
-    public void save(PorDefecto d){
+    public  void save(PorDefecto d){
         porDefectoRepo.save(d);
     }
 }

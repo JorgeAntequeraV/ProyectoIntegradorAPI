@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = "tokens_recuperacion")
 public class TokenRecuperacion {
 
-    public enum Tipo { RESET_PASSWORD, CAMBIO_EMAIL }
+    public enum Tipo { RESET_PASSWORD, CAMBIO_EMAIL, VERIFY_EMAIL }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

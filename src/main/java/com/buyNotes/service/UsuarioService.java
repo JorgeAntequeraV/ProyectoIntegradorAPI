@@ -22,14 +22,16 @@ public class UsuarioService {
 	private static final char[] alfabeto = "0123456789ABCDEFGHJKLMNPQRSTUVWXYZ".toCharArray();
 	
 	private final UsuarioRepository usuarioRepo;
-	
+
 	private final JwtUtil jwtUtil;
-    
+
     private final BCryptPasswordEncoder passwordEncoder;
 
 	private final SolicitudAmistadRepository solicitudAmistadRepo;
-	
-	
+
+	private final AuthService authService;
+
+
 	public Usuario createUsuario(Usuario usuario) {
 
 
@@ -38,30 +40,21 @@ public class UsuarioService {
             throw new IllegalArgumentException("El nombre de usuario ya está en uso.");
         }
 
-
-        Usuario emailExistente = usuarioRepo.getUsuarioByEmail(usuario.getEmail());
-        if (emailExistente!= null) {
-            throw new IllegalArgumentException("El email ya está registrado.");
-        }
-
         if (usuario.getRol() == null) {
             usuario.setRol(Rol.USER);
         }
         usuario.setTagAmigo(generarTagUnico());
         usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
+        usuario.setEmailVerificado(false);
 
 
         Usuario nuevo = usuarioRepo.save(usuario);
 
         try {
-            String toName = nuevo.getNombreUsuario() != null
-                    ? nuevo.getNombreUsuario()
-                    : nuevo.getNombre();
-
-           
+            authService.enviarVerificacionEmail(nuevo);
         } catch (Exception e) {
-            // Opcional: loggear pero no romper el registro
-            System.out.println(" Error enviando mail de bienvenida: " + e.getMessage());
+            // No bloqueamos el registro si falla el envío del correo
+            System.err.println("Error enviando email de verificación: " + e.getMessage());
         }
 
         return nuevo;
@@ -162,6 +155,12 @@ public class UsuarioService {
 		Usuario u = usuarioRepo.getUsuarioById(userId);
 		if (u == null) throw new IllegalArgumentException("Usuario no encontrado");
 		if (temaOscuro != null) u.setTemaOscuro(temaOscuro);
+		return usuarioRepo.save(u);
+	}
+	@Transactional
+	public Usuario actualizarRol(Long userId) {
+		Usuario u = usuarioRepo.getUsuarioById(userId);
+		u.setRol(Rol.ADMIN);
 		return usuarioRepo.save(u);
 	}
 
