@@ -32,6 +32,10 @@ public class UsuarioService {
 	private final AuthService authService;
 
 
+
+	public Usuario getUsuarioById(Long id){
+		return usuarioRepo.getUsuarioById(id);
+	}
 	public Usuario createUsuario(Usuario usuario) {
 
 
