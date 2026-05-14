@@ -135,6 +135,24 @@ public class UsuariosController {
 		}
 	}
 
+	@GetMapping("/me")
+	public ResponseEntity<?> miPerfil(@RequestAttribute("userId") Long userId) {
+		try {
+			Usuario u = usuarioService.getUsuarioById(userId);
+			return ResponseEntity.ok(Map.of(
+					"id", u.getId(),
+					"nombre", u.getNombre() != null ? u.getNombre() : "",
+					"email", u.getEmail() != null ? u.getEmail() : "",
+					"nombreUsuario", u.getNombreUsuario(),
+					"tagAmigo", u.getTagAmigo(),
+					"rol", u.getRol().name()
+			));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+		}
+	}
+
+
 
 
 
