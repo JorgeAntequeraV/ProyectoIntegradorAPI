@@ -14,5 +14,5 @@ public class ListaDTO {
     private Boolean ordenAscendente;
     private Boolean mostrarPrecios;
     private List<ProductosLista> productos;
-    private Double total; // sumatorio de precios (sólo se rellena si mostrarPrecios = true)
+    private Double total;
 }

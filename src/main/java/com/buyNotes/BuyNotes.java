@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class BuyNotes {
 
-	//Añadir el limitRateFilter, brevo y railway y el captcha
+	//´Probar el rateLimitfilter
 	
 	public static void main(String[] args) {
 		SpringApplication.run(BuyNotes.class, args);

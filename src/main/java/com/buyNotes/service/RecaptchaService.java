@@ -22,7 +22,7 @@ public class RecaptchaService {
     @Value("${recaptcha.url:https://www.google.com/recaptcha/api/siteverify}")
     private String url;
 
-    /** Verifica el token contra la API de Google. Devuelve true si es válido. */
+    //Verifica el token contra la API de Google. Devuelve true si es válido.
     public boolean verificar(String token) {
         if (token == null || token.isBlank()) {
             System.err.println("[reCAPTCHA] Token vacío o null");
@@ -50,7 +50,7 @@ public class RecaptchaService {
             }
             boolean success = Boolean.TRUE.equals(resp.get("success"));
             if (!success) {
-                // Loggea las razones del fallo (codes oficiales de Google)
+                //Loggea las razones del fallo (codes oficiales de Google sacado de la página de documentacion oficial de google)
                 Object errorCodes = resp.get("error-codes");
                 System.err.println("[reCAPTCHA] FALLO. success=false  errorCodes=" + errorCodes
                         + "  hostname=" + resp.get("hostname")

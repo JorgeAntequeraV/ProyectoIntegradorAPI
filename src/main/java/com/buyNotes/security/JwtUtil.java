@@ -21,7 +21,6 @@ public class JwtUtil {
 
     private final Key key;
 
-    // Spring inyecta aquí el valor del properties al construir la clase
     public JwtUtil(@Value("${jwt.secret}") String secret) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }

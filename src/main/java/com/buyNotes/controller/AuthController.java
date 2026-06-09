@@ -17,17 +17,14 @@ public class AuthController {
     private final AuthService authService;
     private final GoogleAuthService googleAuthService;
 
-    /** Body: { "nombreUsuario": "..." } */
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgot(@RequestBody Map<String, String> body) {
         authService.forgotPassword(body.get("nombreUsuario"));
-        // Respuesta neutra siempre (no revelamos si el usuario existe)
         return ResponseEntity.ok(Map.of(
                 "message", "Si el usuario existe, se ha enviado un enlace de restablecimiento al correo registrado."
         ));
     }
 
-    /** Body: { "token": "...", "nuevaContrasena": "..." } */
     @PostMapping("/reset-password")
     public ResponseEntity<?> reset(@RequestBody Map<String, String> body) {
         try {
@@ -38,7 +35,6 @@ public class AuthController {
         }
     }
 
-    /** Body: { "idToken": "..." } — id_token devuelto por Google Sign-In en el cliente. */
     @PostMapping("/google")
     public ResponseEntity<?> google(@RequestBody Map<String, String> body) {
         try {
@@ -49,7 +45,6 @@ public class AuthController {
         }
     }
 
-    /** Body: { "token": "..." } — token recibido en el email de verificación. */
     @PostMapping("/verify-email")
     public ResponseEntity<?> verifyEmail(@RequestBody Map<String, String> body) {
         try {

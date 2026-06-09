@@ -26,11 +26,6 @@ public class GoogleAuthService {
     private final UsuarioService usuarioService;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    /**
-     * IDs de cliente OAuth aceptados (separados por coma).
-     * Como la app Android puede mandar el id_token emitido por su propio
-     * cliente Android o por un cliente Web, conviene aceptar varios.
-     */
     @Value("${google.oauth.client-ids:}")
     private String clientIds;
 
@@ -67,23 +62,22 @@ public class GoogleAuthService {
             throw new IllegalArgumentException("La cuenta de Google no tiene email verificado");
         }
 
-        // 1) ¿Hay ya un usuario con ese email registrado?
+        //¿Hay ya un usuario con ese email registrado?
         Usuario u = usuarioRepo.getUsuarioByEmail(email);
 
-        // 2) Si no existe, lo creamos automáticamente
+        //Si no existe, lo creamos automáticamente
         if (u == null) {
             u = new Usuario();
             u.setEmail(email);
             u.setNombre(nombre != null ? nombre : email);
             u.setNombreUsuario(generarNombreUsuarioUnico(email));
-            // Contraseña aleatoria — el usuario nunca la va a usar (entra siempre con Google)
             u.setContrasena(passwordEncoder.encode(java.util.UUID.randomUUID().toString()));
             u.setRol(Rol.USER);
             u.setTagAmigo(usuarioService.generarTagUnico());
             u = usuarioRepo.save(u);
         }
 
-        // 3) Devolvemos un JWT propio de la app
+        //Devolvemos un JWT propio de la app
         return jwtUtil.generateToken(u);
     }
 
