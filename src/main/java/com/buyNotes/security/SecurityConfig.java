@@ -34,7 +34,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 public class SecurityConfig{
 
     private final JwtAuthenticationFilter jwtFilter;
-
+    private final RateLimitFilter rateLimitFilter;
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -45,6 +45,17 @@ public class SecurityConfig{
                         // públicos
                         .requestMatchers("/error").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        // Swagger / OpenAPI público
+                        .requestMatchers(
+                                "/docs",
+                                "/docs/**",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs",
+                                "/v3/api-docs/**",
+                                "/swagger-resources/**",
+                                "/webjars/**"
+                        ).permitAll()
                         .requestMatchers(HttpMethod.POST,
                                 "/usuarios/login",
                                 "/usuarios/registro",
@@ -64,7 +75,9 @@ public class SecurityConfig{
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
     }

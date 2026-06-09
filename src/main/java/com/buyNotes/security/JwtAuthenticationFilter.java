@@ -35,7 +35,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI();
 
-        // Deja pasar sin autenticar rutas públicas que no necesitan token
         if (path.startsWith("/usuarios/login")
                 || path.equals("/usuarios/registro")
                 || path.equals("/auth/forgot-password")
@@ -43,6 +42,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 || path.equals("/auth/change-email-confirm")
                 || path.equals("/auth/google")
                 || path.equals("/auth/verify-email")
+                || path.startsWith("/swagger-ui")
+                || path.startsWith("/v3/api-docs")
+                || path.equals("/swagger-ui.html")
+                || path.startsWith("/docs")
+                || path.startsWith("/webjars")
+                || path.startsWith("/swagger-resources")
 
 
         ) {
@@ -89,7 +94,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
             System.out.println("Token inválido: " + e.getMessage());
-            //No bloqueamos, simplemente no autenticamos y SecurityConfig resolverá
         }
 
         filterChain.doFilter(request, response);

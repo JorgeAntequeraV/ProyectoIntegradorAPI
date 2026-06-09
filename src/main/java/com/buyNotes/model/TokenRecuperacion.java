@@ -28,7 +28,7 @@ public class TokenRecuperacion {
     @Enumerated(EnumType.STRING)
     private Tipo tipo;
 
-    private String emailNuevo;       // sólo para CAMBIO_EMAIL
+    private String emailNuevo;
     private LocalDateTime expiracion;
     private boolean usado = false;
 }

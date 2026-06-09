@@ -64,12 +64,10 @@ public class Usuario {
     )
     private List<Usuario> amigos = new ArrayList<>();
 
-    // 2. Solicitudes de amistad recibidas
     @JsonIgnore
     @OneToMany(mappedBy = "destinatario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SolicitudAmistad> solicitudesAmistadRecibidas = new ArrayList<>();
 
-    // 3. Invitaciones a listas recibidas
     @JsonIgnore
     @OneToMany(mappedBy = "invitado", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<InvitacionLista> invitacionesListaRecibidas = new ArrayList<>();

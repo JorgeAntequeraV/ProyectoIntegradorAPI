@@ -27,7 +27,6 @@ public class AuthService {
 
     /* ---------- RESET PASSWORD ---------- */
 
-    /** El usuario introduce su nombreUsuario y disparamos el correo de reset. */
     @Transactional
     public void forgotPassword(String nombreUsuario) {
         Usuario u = usuarioRepo.getUsuarioByNombreUsuario(nombreUsuario);
